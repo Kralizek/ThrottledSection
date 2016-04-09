@@ -31,7 +31,7 @@ namespace Tests
             do
             {
                 section.TryEnter();
-            } while (!section.IsFull);
+            } while (section.CanEnter());
 
             return section;
         }
@@ -45,7 +45,6 @@ namespace Tests
 
             sut.TryEnter();
 
-            Assume.That(sut.IsFull, Is.True);
             Assert.That(sut.TryEnter(), Is.False);
         }
 
@@ -56,7 +55,6 @@ namespace Tests
             var spots = Fixture.Create<int>();
             var sut = Fill(CreateSystemUnderTest(spots, interval));
 
-            Assume.That(sut.IsFull);
             Assert.That(sut.TryEnter(), Is.False);
         }
 
@@ -66,8 +64,6 @@ namespace Tests
             var interval = Fixture.Create<TimeSpan>();
             var spots = Fixture.Create<int>();
             var sut = Fill(CreateSystemUnderTest(spots, interval));
-
-            Assume.That(sut.IsFull);
 
             // Wait longer than interval
             _testClock.AdvanceBy(interval + interval);
@@ -81,28 +77,10 @@ namespace Tests
             var interval = Fixture.Create<TimeSpan>();
             var sut = Fill(CreateSystemUnderTest(1, interval));
 
-            Assume.That(sut.IsFull);
-
             // Wait longer than interval
             _testClock.AdvanceBy(interval + interval);
 
-            Assert.That(sut.HasSpots);
+            Assert.That(sut.CanEnter());
         }
-
-        [Test]
-        public void IsFull_returns_false_if_interval_is_awaited_after_last_insert()
-        {
-            var interval = Fixture.Create<TimeSpan>();
-
-            var sut = Fill(CreateSystemUnderTest(1, interval));
-
-            Assume.That(sut.IsFull);
-
-            // Wait longer than interval
-            _testClock.AdvanceBy(interval + interval);
-
-            Assert.That(sut.IsFull, Is.False);
-        }
-
     }
 }
