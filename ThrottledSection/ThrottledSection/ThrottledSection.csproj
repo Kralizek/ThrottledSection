@@ -57,8 +57,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FixedResetThrottledSection.cs" />
     <Compile Include="IClock.cs" />
-    <Compile Include="ThrottledSection.cs" />
+    <Compile Include="IThrottledSection.cs" />
+    <Compile Include="MovingWindowThrottledSection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

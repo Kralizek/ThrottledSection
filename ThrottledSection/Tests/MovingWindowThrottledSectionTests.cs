@@ -10,7 +10,7 @@ using Ploeh.AutoFixture;
 namespace Tests
 {
     [TestFixture]
-    public class ThrottledSectionTests : TestBase
+    public class MovingWindowThrottledSectionTests : TestBase
     {
         private TestClock _testClock;
 
@@ -20,13 +20,12 @@ namespace Tests
             _testClock = new TestClock(Now);
         }
 
-
-        protected ThrottledSection CreateSystemUnderTest(int spots, TimeSpan interval)
+        private MovingWindowThrottledSection CreateSystemUnderTest(int spots, TimeSpan interval)
         {
-            return new ThrottledSection(spots, interval) {Clock = _testClock};
+            return new MovingWindowThrottledSection(spots, interval) {Clock = _testClock};
         }
 
-        private ThrottledSection Fill(ThrottledSection section)
+        private IThrottledSection Fill(IThrottledSection section)
         {
             do
             {
@@ -72,7 +71,7 @@ namespace Tests
         }
 
         [Test]
-        public void HasSpots_returns_true_if_interval_is_awaited_after_last_insert()
+        public void CanEnter_returns_true_if_interval_is_awaited_after_last_insert()
         {
             var interval = Fixture.Create<TimeSpan>();
             var sut = Fill(CreateSystemUnderTest(1, interval));

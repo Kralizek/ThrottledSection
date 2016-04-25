@@ -9,20 +9,13 @@ using System.Threading.Tasks;
 
 namespace Kralizek.ThrottledSection
 {
-    public interface IThrottledSection
-    {
-        bool CanEnter();
-
-        bool TryEnter();
-    }
-
-    public class ThrottledSection : IThrottledSection
+    public class MovingWindowThrottledSection : IThrottledSection
     {
         private readonly int _spots;
         private readonly TimeSpan _interval;
         private readonly ConcurrentQueue<DateTimeOffset> _queue; 
 
-        public ThrottledSection(int spots, TimeSpan interval)
+        public MovingWindowThrottledSection(int spots, TimeSpan interval)
         {
             _spots = spots;
             _interval = interval;
